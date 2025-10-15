@@ -1,0 +1,58 @@
+<!-- templates/sub.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>登録データ一覧</title>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto mt-10 max-w-2xl">
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-700">📄 登録データ一覧</h1>
+                <a href="{{ url_for('index') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                    新規登録
+                </a>
+            </div>
+
+            <!-- データ一覧テーブル -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="py-2 px-4 text-left">ID</th>
+                            <th class="py-2 px-4 text-left">名前</th>
+                            <th class="py-2 px-4 text-left">登録日時</th>
+                            <th class="py-2 px-4 text-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-2 px-4">{{ record.id }}</td>
+                            <td class="py-2 px-4">{{ record.name }}</td>
+                            <td class="py-2 px-4">{{ record.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td class="py-2 px-4 flex justify-center space-x-2">
+                                <!-- 更新ボタン -->
+                                <a href="{{ url_for('index', id=record.id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-bold py-1 px-3 rounded transition duration-300">更新</a>
+                                <!-- 削除ボタン -->
+                                <form action="{{ url_for('delete_record', record_id=record.id) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
+                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white text-sm font-bold py-1 px-3 rounded transition duration-300">削除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-gray-500">データがありません。</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
